@@ -13,6 +13,7 @@ import { createSelector } from "reselect";
 import { setPopularDishes } from "./slice";
 import { retrievePopularDishes } from "./selector";
 import { Product } from "../../../lib/types/product";
+import { log } from "console";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)),
@@ -22,6 +23,8 @@ const popularDishesRetriever = createSelector(
   retrievePopularDishes,
   (popularDishes) => ({ popularDishes })
 );
+
+console.log(process.env.REACT_APP_API_URL);
 
 export default function HomePage() {
   const { setPopularDishes } = actionDispatch(useDispatch());
