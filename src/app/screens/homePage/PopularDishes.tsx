@@ -9,28 +9,36 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DescriptionOutlinedIcon from "@mui/icons-material/DialerSipOutlined";
 import Divider from "@mui/joy/Divider";
+import { DefaultRootState, useSelector } from "react-redux";
+import { serverApi } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrievePopularDishes } from "./selector";
 
-const list = [
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-];
+/** REDUX SLICE & SELECTOR **/
+
+const popularDishesRetriever = createSelector(
+  retrievePopularDishes,
+  (popularDishes) => ({ popularDishes })
+);
 
 export default function PopularDishes() {
+  const { popularDishes } = useSelector(popularDishesRetriever);
+
   return (
-    <div className={"popular-dishes-frame"}>
+    <div className="popular-dishes-frame">
       <Container>
-        <Stack className={"popular-section"}>
-          <Box className={"category-title"}>Popular Dishes</Box>
-          <Stack className={"cards-frame"}>
-            {list.length !== 0 ? (
-              list.map((ele, index) => {
+        <Stack className="popular-section">
+          <Box className="category-title">Popular Dishes</Box>
+          <Stack className="cards-frame">
+            {popularDishes.length !== 0 ? (
+              popularDishes.map((product: Product) => {
+                const imagePath = `${serverApi}/${product.productImages[0]}`;
                 return (
-                  <CssVarsProvider key={index}>
+                  <CssVarsProvider key={product._id}>
                     <Card className={"card"}>
                       <CardCover>
-                        <img src={ele.imagePath} alt="" />
+                        <img src={imagePath} alt="" />
                       </CardCover>
                       <CardCover className={"card-cover"} />
                       <CardContent sx={{ justifyContent: "flex-end" }}>
@@ -40,11 +48,11 @@ export default function PopularDishes() {
                         >
                           <Typography
                             level="h2"
-                            fontSize={"lg"}
-                            textColor={"#fff"}
+                            fontSize="lg"
+                            textColor="#fff"
                             mb={1}
                           >
-                            {ele.productName}
+                            {product.productName}
                           </Typography>
                           <Typography
                             sx={{
@@ -54,7 +62,7 @@ export default function PopularDishes() {
                               display: "flex",
                             }}
                           >
-                            20
+                            {product.productViews}
                             <VisibilityIcon
                               sx={{ fontSize: 25, marginLeft: "5px" }}
                             />
@@ -73,9 +81,9 @@ export default function PopularDishes() {
                       >
                         <Typography
                           startDecorator={<DescriptionOutlinedIcon />}
-                          textColor={"neutral.300"}
+                          textColor="neutral.300"
                         >
-                          This is delicious meal
+                          {product.productDesc}
                         </Typography>
                       </CardOverflow>
                     </Card>
@@ -83,9 +91,7 @@ export default function PopularDishes() {
                 );
               })
             ) : (
-              <Box className={"no-data"}>
-                Popular product are not available!
-              </Box>
+              <Box className="no-data">Popular products are not available!</Box>
             )}
           </Stack>
         </Stack>
