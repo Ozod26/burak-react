@@ -11,15 +11,16 @@ import { createSelector } from "reselect";
 import { setNewDishes, setPopularDishes, setTopUsers } from "./slice";
 import { retrievePopularDishes } from "./selector";
 import { Product } from "../../../lib/types/product";
-import { log } from "console";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import MemberService from "../../services/MemberService";
 import "../../../css/home.css";
+import { Member } from "../../../lib/types/member";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)),
   setNewDishes: (data: Product[]) => dispatch(setNewDishes(data)),
+  setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
 const popularDishesRetriever = createSelector(
@@ -30,7 +31,9 @@ const popularDishesRetriever = createSelector(
 console.log(process.env.REACT_APP_API_URL);
 
 export default function HomePage() {
-  const { setPopularDishes, setNewDishes } = actionDispatch(useDispatch());
+  const { setPopularDishes, setNewDishes, setTopUsers } = actionDispatch(
+    useDispatch()
+  );
 
   useEffect(() => {
     // Backend server data fetch => DATA
