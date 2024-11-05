@@ -5,8 +5,6 @@ import NewDishes from "./NewDishes";
 import Advertisement from "./Advertisement";
 import ActiveUsers from "./ActiveUsers";
 import Events from "./Events";
-import "../../../css/home.css";
-
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
@@ -17,9 +15,11 @@ import { log } from "console";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import MemberService from "../../services/MemberService";
+import "../../../css/home.css";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)),
+  setNewDishes: (data: Product[]) => dispatch(setNewDishes(data)),
 });
 
 const popularDishesRetriever = createSelector(
@@ -30,8 +30,7 @@ const popularDishesRetriever = createSelector(
 console.log(process.env.REACT_APP_API_URL);
 
 export default function HomePage() {
-  const { setPopularDishes } = actionDispatch(useDispatch());
-  const { popularDishes } = useSelector(popularDishesRetriever);
+  const { setPopularDishes, setNewDishes } = actionDispatch(useDispatch());
 
   useEffect(() => {
     // Backend server data fetch => DATA
