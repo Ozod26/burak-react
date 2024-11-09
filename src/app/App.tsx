@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
@@ -13,16 +13,49 @@ import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import Test from "./screens/userPage/test";
+import { CartItem } from "../lib/types/search";
+import useBasket from "./hooks/useBasket";
 
 function App() {
   const location = useLocation();
+  const { cartItems, onAdd, onRemove, onDeleteAll, onDelete } = useBasket();
+
+  /** HANDLARS */
 
   return (
     <>
-      {location.pathname == "/" ? <HomeNavbar /> : <OtherNavbar />}
+      {location.pathname === "/" ? (
+        <HomeNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+          // setSignupOpen={setSignupOpen}
+          // setLoginOpen={setLoginOpen}
+          // anchorEl={anchorEl}
+          // handleLogoutClick={handleLogoutClick}
+          // handleCloseLogout={handleCloseLogout}
+          // handleLogoutRequest={handleLogoutRequest}
+        />
+      ) : (
+        <OtherNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+          // setSignupOpen={setSignupOpen}
+          // setLoginOpen={setLoginOpen}
+          // anchorEl={anchorEl}
+          // handleLogoutClick={handleLogoutClick}
+          // handleCloseLogout={handleCloseLogout}
+          // handleLogoutRequest={handleLogoutRequest}
+        />
+      )}
       <Switch>
         <Route path="/products">
-          <ProductsPage />
+          <ProductsPage onAdd={onAdd} />
         </Route>
         <Route path="/orders">
           <OrdersPage />
@@ -39,6 +72,13 @@ function App() {
         </Route>
       </Switch>
       <Footer />
+
+      {/* <AuthenticationModal
+        signupOpen={signupOpen}
+        loginOpen={loginOpen}
+        handleLoginClose={handleLoginClose}
+        handleSignupClose={handleSignupClose}
+      /> */}
     </>
   );
 }

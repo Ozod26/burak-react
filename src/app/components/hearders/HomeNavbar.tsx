@@ -3,8 +3,19 @@ import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import React, { useState, useEffect } from "react";
 import { log } from "console";
+import { CartItem } from "../../../lib/types/search";
 
-export default function HomeNavbar() {
+interface HomeNavbarProps {
+  cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
+}
+
+export default function HomeNavbar(props: HomeNavbarProps) {
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+
   const autMember = null;
   const [count, setCount] = useState<number>(0);
   const [value, setvalue] = useState<boolean>(true);
@@ -65,7 +76,13 @@ export default function HomeNavbar() {
             </Box>
 
             {/* BASKET */}
-            <Basket />
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
 
             {!autMember ? (
               <Box>
