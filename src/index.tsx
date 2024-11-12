@@ -9,19 +9,26 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./app/MaterialTheme";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./css/index.css";
+import ContextProvider from "./app/context/ContextProvider";
+import { SocketProvider } from "./app/context/SocketContext";
 
 const Container = document.getElementById("root")!;
 const root = createRoot(Container);
 
 root.render(
+  // virtual dom
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <App />
-        </Router>
-      </ThemeProvider>
+      <ContextProvider>
+        <SocketProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router>
+              <App />
+            </Router>
+          </ThemeProvider>
+        </SocketProvider>
+      </ContextProvider>
     </Provider>
   </React.StrictMode>
 );

@@ -12,15 +12,39 @@ import HelpPage from "./screens/helpPage";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
-import Test from "./screens/userPage/test";
-import { CartItem } from "../lib/types/search";
 import useBasket from "./hooks/useBasket";
+import AuthenticationModal from "./components/auth";
+import MemberService from "./services/MemberService";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
+import { Messages } from "../lib/config";
 
 function App() {
   const location = useLocation();
   const { cartItems, onAdd, onRemove, onDeleteAll, onDelete } = useBasket();
+  const [signupOpen, setSignupOpen] = useState<boolean>(false);
+  const [loginOpen, setLoginOpen] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   /** HANDLARS */
+  const handleSignupClose = () => setSignupOpen(false);
+  const handleLoginClose = () => setLoginOpen(false);
+
+  const handleLogoutClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const handleCloseLogout = () => setAnchorEl(null);
+  const handleLogoutRequest = async () => {
+    try {
+      const member = new MemberService();
+      await member.logout();
+
+      await sweetTopSuccessAlert("success", 700);
+      setAuthMember(null);
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(Messages.error1);
+    }
+  };
 
   return (
     <>
@@ -31,12 +55,12 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
-          // setSignupOpen={setSignupOpen}
-          // setLoginOpen={setLoginOpen}
-          // anchorEl={anchorEl}
-          // handleLogoutClick={handleLogoutClick}
-          // handleCloseLogout={handleCloseLogout}
-          // handleLogoutRequest={handleLogoutRequest}
+          setSignupOpen={setSignupOpen}
+          setLoginOpen={setLoginOpen}
+          anchorEl={anchorEl}
+          handleLogoutClick={handleLogoutClick}
+          handleCloseLogout={handleCloseLogout}
+          handleLogoutRequest={handleLogoutRequest}
         />
       ) : (
         <OtherNavbar
@@ -45,12 +69,12 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
-          // setSignupOpen={setSignupOpen}
-          // setLoginOpen={setLoginOpen}
-          // anchorEl={anchorEl}
-          // handleLogoutClick={handleLogoutClick}
-          // handleCloseLogout={handleCloseLogout}
-          // handleLogoutRequest={handleLogoutRequest}
+          setSignupOpen={setSignupOpen}
+          setLoginOpen={setLoginOpen}
+          anchorEl={anchorEl}
+          handleLogoutClick={handleLogoutClick}
+          handleCloseLogout={handleCloseLogout}
+          handleLogoutRequest={handleLogoutRequest}
         />
       )}
       <Switch>
@@ -73,14 +97,17 @@ function App() {
       </Switch>
       <Footer />
 
-      {/* <AuthenticationModal
+      <AuthenticationModal
         signupOpen={signupOpen}
         loginOpen={loginOpen}
         handleLoginClose={handleLoginClose}
         handleSignupClose={handleSignupClose}
-      /> */}
+      />
     </>
   );
 }
 
 export default App;
+function setAuthMember(arg0: null) {
+  throw new Error("Function not implemented.");
+}
