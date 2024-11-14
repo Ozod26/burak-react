@@ -23,10 +23,10 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
-const popularDishesRetriever = createSelector(
-  retrievePopularDishes,
-  (popularDishes) => ({ popularDishes })
-);
+// const popularDishesRetriever = createSelector(
+//   retrievePopularDishes,
+//   (popularDishes) => ({ popularDishes })
+// );
 
 console.log(process.env.REACT_APP_API_URL);
 
