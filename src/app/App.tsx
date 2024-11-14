@@ -17,35 +17,35 @@ import AuthenticationModal from "./components/auth";
 import MemberService from "./services/MemberService";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
+import ContextProvider from "./context/ContextProvider";
+import { useGlobals } from "./hooks/useGlobals";
 
 function App() {
   const location = useLocation();
-  const { cartItems, onAdd, onRemove, onDeleteAll, onDelete } = useBasket();
+  const { setAuthMember } = useGlobals();
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
   const [signupOpen, setSignupOpen] = useState<boolean>(false);
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorElement] = useState<HTMLElement | null>(null);
 
-  /** HANDLARS */
+  /** HANDLERS **/
   const handleSignupClose = () => setSignupOpen(false);
   const handleLoginClose = () => setLoginOpen(false);
-
   const handleLogoutClick = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
+    setAnchorElement(e.currentTarget);
   };
-  const handleCloseLogout = () => setAnchorEl(null);
+  const handleCloseLogout = () => setAnchorElement(null);
   const handleLogoutRequest = async () => {
     try {
       const member = new MemberService();
       await member.logout();
-
       await sweetTopSuccessAlert("success", 700);
       setAuthMember(null);
     } catch (err) {
-      console.log(err);
+      console.log("error", err);
       sweetErrorHandling(Messages.error1);
     }
   };
-
   return (
     <>
       {location.pathname === "/" ? (
@@ -91,23 +91,18 @@ function App() {
           <HelpPage />
         </Route>
         <Route path="/">
-          {/* <Test /> */}
           <HomePage />
         </Route>
       </Switch>
       <Footer />
-
       <AuthenticationModal
         signupOpen={signupOpen}
         loginOpen={loginOpen}
-        handleLoginClose={handleLoginClose}
         handleSignupClose={handleSignupClose}
+        handleLoginClose={handleLoginClose}
       />
     </>
   );
 }
 
 export default App;
-function setAuthMember(arg0: null) {
-  throw new Error("Function not implemented.");
-}
