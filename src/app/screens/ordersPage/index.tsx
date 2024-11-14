@@ -8,6 +8,16 @@ import ProcessOrders from "./ProcessOrders";
 import FinishedOrders from "./FinishedOrders";
 import { SyntheticEvent, useState } from "react";
 import "../../../css/orders.css";
+import { Order } from "../../../lib/types/order";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
+
+/** REDUX SLICE & SELECTOR */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+  setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
+});
 
 export default function OrdersPage() {
   const [value, setValue] = useState("1");
