@@ -97,6 +97,7 @@ class MemberService {
       formData.append("memberAddress:", input.memberAddress || "");
       formData.append("memberDesc", input.memberDesc || "");
       formData.append("memberImage", input.memberImage || "");
+      console.log("FormData:", formData);
 
       const result = await axios(`${serverApi}/member/update`, {
         method: "POST",
@@ -108,6 +109,7 @@ class MemberService {
       });
 
       console.log("updateMember:", result);
+
       const member: Member = result.data;
       localStorage.setItem("mamberData", JSON.stringify(member));
       return member;
